@@ -1,0 +1,1 @@
+A small web service that takes the source and a list of destinations and returns a list of routes between source and each destinations. Both source and destination are defined as a pair of latitude and longitude. The returned list of routes is sorted by driving time and distance (if time is equal).
