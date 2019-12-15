@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/app.js",
     "devgeocode": "nodemon ./src/utils/geocode.js",
     "devosrm": "nodemon ./src/utils/osrm_api.js",
     "dev": "nodemon ./src/app.js"
