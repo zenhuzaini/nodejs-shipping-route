@@ -19,8 +19,8 @@ const setPartials = path.join(__dirname, '../template/partials')
 hbs.registerPartials(setPartials)
 
 //help variable 
-let destination_save = [];
-let source_save;
+var destination_save = [];
+var source_save;
 
 app.get('/', (req, res) => {
     //everytime it refreshes, it will be set null
@@ -63,12 +63,14 @@ app.get("/easyroute", (req, res) => {
     }
     //call the osrm value
     osrm.osrm(Object.values(source_save).toString(), final_destinations, (err, result) => {
+
         if (err) {
             return res.send(err);
         }
         res.send(result);
-    }
-    );
+
+    });
+
 });
 
 // /setsource/?source=address_wroclaw

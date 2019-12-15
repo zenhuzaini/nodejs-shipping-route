@@ -30,6 +30,7 @@ const osrm = (addressOrigin, adressDestination, callback) => {
                 destination_result
             }
             callback(undefined, result);
+            destination_result = []
         }
     });
 };
