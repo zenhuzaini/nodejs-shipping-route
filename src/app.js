@@ -1,27 +1,47 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const path = require('path')
+const hbs = require('hbs')
+const port = process.env.PORT || 3000;
 
 const geocode = require("./utils/geocode.js");
 const osrm = require("./utils/osrm_api.js");
 
-//variable 
+const publicDirectory = path.join(__dirname, '../public')
+app.use(express.static(publicDirectory))
+
+const viewDirectory = path.join(__dirname, '../template/views')
+app.set('view engine', 'hbs')
+app.set('views', viewDirectory)
+
+const setPartials = path.join(__dirname, '../template/partials')
+hbs.registerPartials(setPartials)
+
+//help variable 
 let destination_save = [];
 let source_save;
 
-app.get("/", (req, res) => {
-    const destination = req.query.destination;
-    const source = req.query.source;
+app.get('/', (req, res) => {
+    //everytime it refreshes, it will be set null
+    destination_save = [];
+    source_save = ''
 
-    if (!destination || !source) {
+    res.render('homepage', { title: 'Shipping Route' })
+})
+
+app.get('/help', (req, res) => {
+    res.render('help', { title: 'Help' })
+})
+
+app.get("/easyroute", (req, res) => {
+
+    if (destination_save === null || source_save === null) {
         return res.send("you must provide the destination and source");
     }
 
-    console.log("here is ", source_save);
-    console.log("here is ", destination_save);
-
     //try to change the array object into 'Just' array
     //Creates a new array by manipulating the values in another array
+    //the longitude and latitude has been retrieved before
     let result_destination = destination_save.map(
         a => a.longitude + "," + a.latitude
     );
@@ -37,17 +57,16 @@ app.get("/", (req, res) => {
     });
 
     console.log("this is the ", final_destinations);
-
+    if (final_destinations === null || source_save === null) {
+        return res.send('you must set the destination and the source')
+    }
     //call the osrm value
-    osrm.osrm(
-        Object.values(source_save).toString(),
-        final_destinations,
-        (err, result) => {
-            if (err) {
-                return res.send(err);
-            }
-            res.send(result);
+    osrm.osrm(Object.values(source_save).toString(), final_destinations, (err, result) => {
+        if (err) {
+            return res.send(err);
         }
+        res.send(result);
+    }
     );
 });
 
@@ -65,7 +84,12 @@ app.get("/setsource", (req, res) => {
         }
 
         source_save = result;
-        res.send(source_save);
+        //console.log(source_save.longitude)
+        const { longitude, latitude } = source_save;
+        res.send({
+            longitude: longitude,
+            latitude: latitude
+        });
     });
 });
 
@@ -93,6 +117,7 @@ app.get("/setdestination", (req, res) => {
 //this route is used to track the given address (latitude and longitude)
 // /route/?src=SOURCE_LATITUDE_COMMA_LONGITUDE&dst=_LATITUDE_COMMA_LONGITUDE&dst=_LATITUDE_COMMA_LONGITUDE
 //query string dst can be more than one
+//example : http://localhost:3000/route/?src=17.035318,51.107706&dst=25.060768,51.115341&dst=20.058637,51.112269
 app.get("/route", (req, res) => {
     const source = req.query.src;
     const destination = req.query.dst;
@@ -117,6 +142,19 @@ app.get("/route", (req, res) => {
         res.send(result);
     });
 });
+
+app.get('/help/*', (req, res) => {
+    res.render('404', {
+        title: '404',
+        errMessage: `the endpoint doesn't exist - 404`
+    })
+})
+
+app.get('*', (req, res) => { //* it means that can be match to everything / every endpoints
+    res.render('404', {
+        errMessage: `the endpoint doesn't work - 404`
+    })
+})
 
 app.listen(port, () => {
     console.log("conneted to port ", port);

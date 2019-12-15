@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+    </head>
+
+    <body>
+        {{>header}}
+
+        <h2>Welcome to Help</h2>
+        <p>Description about this web App</p>
+        <p>It is a very simple web app that can help traces the shipping route</p>
+        <p>This web app is build using Nodejs, Express and 2 libraries: OSRM API and Mapbox</p>
+        <br>
+        <p><b>OSRM API</b> is an open source API that can enable the developer to get complete shippng route information
+            that includes driving time and distance</p>
+        <p><b>Mapbox</b> is also a free API that can let the developer to translate the given address into longitude and
+            latitude (and reverse it)</p>
+        <hr>
+        <h2>There are two ways of using this simple web app</h2>
+        <p>1. We ca access directly from the homepage</p>
+        <p>in order to get the route we must go to the homepage, fill the source address, fill the destination address
+            (can be more than one), and click Get Route button </p>
+        <p>2. We can directly use the endpoint</p>
+        <p>in the contrary of the first way. In this way we must know the latitude and longitude of an area (for the
+            home address / source address and the destination address) in order
+            to get the route</p>
+        <p>We can only provide <b>one source address</b>, but we can provide <b>more than one destination address</b>
+            the url can be used like this</p>
+        <p><b>/route/?src=17.035318,51.107706&dst=25.060768,51.115341&dst=20.058637,51.112269</b></p>
+        <p>src= is for the source address (latitude, longitude), dst = is for the destination address (latitude,
+            longitude)</p>
+        <hr>
+        {{>footer}}
+    </body>
+
+</html>
