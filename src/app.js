@@ -36,8 +36,8 @@ app.get('/help', (req, res) => {
 
 app.get("/easyroute", (req, res) => {
 
-    if (destination_save === null || source_save === null) {
-        return res.send("you must provide the destination and source");
+    if (destination_save.length === 0 || source_save === '') {
+        return res.send("you must provide the destination and source, Back to homepage!");
     }
 
     //try to change the array object into 'Just' array
