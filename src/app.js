@@ -5,8 +5,8 @@ const hbs = require('hbs')
 
 const port = process.env.PORT || 3000;
 
-const geocode = require("./utils/geocode.js");
-const osrm = require("./utils/osrm_api.js");
+const geocode = require("../src/utils/geocode.js");
+const osrm = require("../src/utils/osrm_api.js");
 
 const publicDirectory = path.join(__dirname, '../public')
 app.use(express.static(publicDirectory))
